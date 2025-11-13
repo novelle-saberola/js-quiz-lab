@@ -31,28 +31,7 @@ const quizData = [
         question: "What does the 'async' keyword do in JavaScript?",
         options: ["Pauses the code until the user clicks a button", "Allows the use of 'await' and returns a promise", "Runs a function faster than normal", "Stops the program when an error occurs"],
         correct: 1  
-    },
-    {
-        question: "What will `console.log(0 == false)` output?",
-        options: ["true", "false", "undefined", "Error"],
-        correct: 0
-    },
-    {
-        question: "Which of the following is NOT a JavaScript data type?",
-        options: ["Boolean", "Number", "Float", "Undefined"],
-        correct: 2
-    },
-    {
-        question: "What keyword is used to stop a loop early?",
-        options: ["stop", "exit", "break", "return"],
-        correct: 2
-    },
-    {
-        question: "How do you create a new array with values 1, 2, and 3?",
-        options: ["var arr = [1, 2, 3];", "var arr = (1, 2, 3);", "var arr = {1, 2, 3};", "var arr = <1, 2, 3>;"],
-        correct: 0
     }
-
     // Students: Add more here for extension!
 ];
 
@@ -61,8 +40,8 @@ let score = 0;
 let totalQuestions = quizData.length;
 let selectedAnswer = -1;
 let timerInterval; // For per-question timer
-let timeLeft = 10; // 30 seconds per question
-let highScore = parseInt(localStorage.getItem('jsQuizHighScore')) || 0;
+let timeLeft = 30; // 30 seconds per question
+let highScore = localStorage.getItem('jsQuizHighScore') || 0;
 
 // Utility: Update progress bar
 function updateProgress() {
@@ -74,7 +53,7 @@ function updateProgress() {
 
 // Extension: Start timer for each question
 function startTimer() {
-    timeLeft = 10;
+    timeLeft = 30;
     document.getElementById('timer-container').style.display = 'block';
     document.getElementById('timer-text').textContent = timeLeft;
     document.getElementById('timer-fill').style.width = '100%';
@@ -82,7 +61,7 @@ function startTimer() {
     timerInterval = setInterval(() => {
         timeLeft--;
         document.getElementById('timer-text').textContent = timeLeft;
-        document.getElementById('timer-fill').style.width = (timeLeft / 10 * 100) + '%';
+        document.getElementById('timer-fill').style.width = (timeLeft / 30 * 100) + '%';
 
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
@@ -114,7 +93,7 @@ function loadQuestion() {
             btn.setAttribute('aria-label', `Option: ${option}`);
             btn.onclick = () => selectOption(index);
             btn.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e,key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     btn.click();
                 }
@@ -180,24 +159,19 @@ function showScore() {
     document.getElementById('score').textContent = score;
     document.getElementById('total').textContent = totalQuestions;
 
-    if (score > highScore) {
-        highScore = score;
-        localStorage.setItem('jsQuizHighScore', highScore);
-    }
-
-      if (highScore > 0) {
-        document.getElementById('high-score').style.display = 'block';
-        document.getElementById('high-score-val').textContent = highScore;
-    } else {
-        document.getElementById('high-score').style.display = 'none';
-    }
-
-
     let feedback = '';
     if (percentage >= 80) feedback = "Outstanding! You're a JavaScript wizard. 🌟";
     else if (percentage >= 60) feedback = "Well done! Keep practicing those concepts. 👍";
     else feedback = "Good start—dive back into the lecture notes for a refresh. 📚";
     document.getElementById('feedback').textContent = feedback;
+
+    // Extension: High score
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('jsQuizHighScore', highScore);
+        document.getElementById('high-score').style.display = 'block';
+        document.getElementById('high-score-val').textContent = highScore;
+    }
 
     if (percentage === 100) {
         confetti({
